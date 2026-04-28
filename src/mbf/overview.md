@@ -53,7 +53,7 @@ The steps are described below (every array is a 0-indexed byte array):
 2. Pick another byte in the pool randomly and insert it into a random position of `random_buffer`.
 3. Set `random_buffer[10/11/12/13]` to `random_buffer[0/40/51/4] + random_buffer[23/25/50/45] + uid[0/1/2/3]` (`uid` is the player's uid expressed in a 32-bit integer) and `random_buffer[14/15/16/17]` to `random_buffer[41/22/35/39] ^ blend_field[0/1/2/3]`.
 4. Hash the payload to generate a digest and validate it to confirm if it matches the criteria. The criteria are given by the following statement:
-> If the difficulty is `N`, then for every integer `i` in `[0, N)`, there is `(hash[i >> 3] << (i & 7)) & 128 == 0`.
+> If the difficulty is `N`, then for every integer `i` in `[0, N)`, there is `(digest[i >> 3] << (i & 7)) & 128 == 0`.
 5. If the digest meets the criteria, "mask" `random_buffer` by setting `random_buffer[i]` to `random_buffer[i] ^ mask[i % 20]` for every integer `i` in `[0, 64)`; otherwise repeat step 1. The masked array is the result sent by the client in the opcode 5/10 packet, such as this one shown below:
 ```
 [212,153,0,149,244,56,73,26,178,35,28,213,168,24,168,171,98,149,44,184,17,8,186,240,133,97,240,60,19,240,248,28,116,101,177,105,164,25,88,23,107,205,198,51,106,126,26,249,169,143,150,119,251,252,183,90,184,78,110,34,190,129,82,87]
